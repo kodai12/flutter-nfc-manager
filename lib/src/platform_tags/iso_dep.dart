@@ -8,6 +8,8 @@ import '../translator.dart';
 ///
 /// Acquire `IsoDep` instance using `IsoDep.from`.
 class IsoDep {
+  static const int TRANSCEIVE_TIMEOUT = 5 * 1000;
+
   /// Constructs an instance with the given values for testing.
   ///
   /// The instances constructs by this way are not valid in the production environment.
@@ -53,10 +55,12 @@ class IsoDep {
   /// This uses IsoDep#transceive API on Android.
   Future<Uint8List> transceive({
     required Uint8List data,
+    {Duration? timeout},
   }) async {
     return channel.invokeMethod('IsoDep#transceive', {
       'handle': _tag.handle,
       'data': data,
+      'timeout': timeout?.inMilliseconds ?? TRANSCEIVE_TIMEOUT,
     }).then((value) => value!);
   }
 }
